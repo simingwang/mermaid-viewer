@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@newmo-oss/mermaid-viewer</title>
+    <title>在线Mermaid流程图,支持图片下载</title>
     <meta
         name="description"
         content="User Friendly Mermaid Diagram Viewer">
+    <!-- Meta 标签示例 -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'">
     <link rel="canonical" href="https://newmo-oss.github.io/mermaid-viewer/" />
+    
     <!--    emoji favicon-->
     <link rel="icon"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='0' y='20' font-size='20' fill='%23f1f1f1'%3E🧜‍️%3C/text%3E%3C/svg%3E"
@@ -208,30 +211,28 @@
             </style>
             <dialog id="inputDialog">
                 <div style="width: 100%; height: 100%;">
-                    <label for="inputDialogInput">Marmaid Diagram</label><textarea id="inputDialogInput"
+                    <label for="inputDialogInput">Marmaid流程文件</label><textarea id="inputDialogInput"
                                                                                    style="display: block;width: 100%; height: 35em; max-height: 50%;"></textarea>
                     <div
                         style="display: flex;flex-direction: column; align-items: center; align-content: center; padding-block: 0.5rem;">
-                        <button id="inputDialogClose" class="renderButton" style="display: block;">Render</button>
+                        <button id="inputDialogClose" class="renderButton" style="display: block;">渲染</button>
                     </div>
-                    <h2>Usage</h2>
+                    <h2>使用说明</h2>
                     <ol>
-                        <li>📝 Write Mermaid Diagram in the textarea</li>
-                        <li>🔍 Click "Render" Button</li>
-                        <li>🔗 Copy URL and Share it!</li>
+                        <li>📝 在文本框中编写Mermaid流程图</li>
+                        <li>🔍 点击"渲染"按钮</li>
+                        <li>🔗 复制URL并分享!</li>
                     </ol>
                     <footer class="footer">
                         <p class="footerText">
-                            Source Code is available on <a href="https://github.com/newmo-oss/mermaid-viewer">GitHub</a>
                         </p>
                         <p class="footerText">
-                            Created by <a href="https://newmo.me/">newmo, Inc.</a>
                         </p>
                     </footer>
                 </div>
             </dialog>
             <div id="sequenceController" class="sequenceController">
-                <button id="prevSequence" class="prevButton">Prev</button>
+                <button id="prevSequence" class="prevButton">上一步</button>
                 <div class="sequenceNumberBox">
                     <label id="sequenceNumberLabel" class="sequenceNumberLabel" for="sequenceStepper">0</label>
                     <input type="range"
@@ -239,15 +240,18 @@
                            class="sequenceStepper"
                            min="0" max="1" value="0">
                 </div>
-                <button id="nextSequence" class="nextButton">Next</button>
+                <button id="nextSequence" class="nextButton">下一步</button>
             </div>
             <div class="editDialogBox">
-                <button id="openDialog" class="openDialog" title="Edit Diagram">🛠️</button>
+                <button id="openDialog" class="openDialog" title="编辑图表">🛠️</button>
             </div>
         </div>
     </template>
 </x-mermaid-controller>
 <div id="graphDiv"></div>
+<div class="downloadBox" style="position: fixed; top: 20px; right: 20px; z-index: 1001;">
+    <button id="downloadBtn" class="openDialog" title="Download Diagram">下载</button>
+</div>
 <script type="module" src="index.ts"></script>
 </body>
 </html>

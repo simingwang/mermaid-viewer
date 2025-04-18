@@ -136,8 +136,11 @@ jobs:
 
 See [Releases page](https://github.com/newmo-oss/mermaid-viewer/releases).
 
-## Running tests
+## Environment Requirements
+- Node.js version >=6.9.0
+- Recommend using nvm for Node version management
 
+## Running tests
 Install devDependencies and Run `npm test`:
 
     npm test

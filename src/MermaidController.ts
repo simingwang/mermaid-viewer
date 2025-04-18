@@ -129,9 +129,54 @@ export class MermaidController extends HTMLElement {
         sequenceControllerElement: HTMLDivElement;
     };
     #pan?: PanZoom;
+    #downloadButton?: HTMLButtonElement;
+
+    async downloadAsPNG() {
+        const svgElement = document.querySelector('#graphDiv').querySelector('svg');
+        if (!svgElement) return;
+
+        const svgData = new XMLSerializer().serializeToString(svgElement);
+        
+        // Create canvas and set dimensions
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Set canvas dimensions based on SVG viewBox or client size
+        const viewBox = svgElement.getAttribute('viewBox');
+        if (viewBox) {
+            const [,, width, height] = viewBox.split(' ').map(Number);
+            canvas.width = width;
+            canvas.height = height;
+        } else {
+            canvas.width = svgElement.clientWidth;
+            canvas.height = svgElement.clientHeight;
+        }
+        
+        // Fill white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Create Image and draw to canvas
+        const img = new Image();
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+            const link = document.createElement('a');
+            link.download = 'diagram.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    }
 
     constructor() {
         super();
+        // 添加下载按钮DOM
+        this.#downloadButton = document.querySelector('#downloadBtn');
+        this.#downloadButton?.addEventListener('click', () => this.downloadAsPNG());
+
         if (!this.shadowRoot) {
             return; // Do nothing if no shadow root
         }
@@ -154,7 +199,9 @@ export class MermaidController extends HTMLElement {
         this.shadowRoot.addEventListener(
             "mousedown",
             (event) => {
-                event.stopPropagation();
+                if (!(event.target as HTMLElement).closest('#downloadBtn')) {
+                    event.stopPropagation();
+                }
             },
             {
                 passive: false
